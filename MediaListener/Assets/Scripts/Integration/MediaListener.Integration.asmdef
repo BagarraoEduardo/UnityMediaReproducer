@@ -1,8 +1,8 @@
 {
-    "name": "MediaListener.Core",
+    "name": "MediaListener.Integration",
     "rootNamespace": "",
     "references": [
-        "GUID:5b1875e96f390440fa83c42487eb99e4",
+        "GUID:eb445fb4f83264d7493cfdbac5b383d2",
         "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
     "includePlatforms": [],
