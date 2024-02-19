@@ -19,10 +19,10 @@ public class AudioController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost(Name = "Download")]
-    [Produces("application/json")]
-    [ProducesResponseType(typeof(GetDownloadedFileResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(GetDownloadedFileResponse), StatusCodes.Status500InternalServerError)]
+    [HttpGet(Name = "Download")]
+    // [Produces("audio/mpeg")]
+    // [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    // [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Download()
     {
         var response = new GetDownloadedFileResponse();
@@ -31,7 +31,7 @@ public class AudioController : ControllerBase
         {
             response = await _mediator.Send(new GetDownloadedFileRequest());
             
-            return Ok(response);
+            return File(response.FileContent, response.MimeType, response.Filename);
         }
         catch(Exception exception)
         {
@@ -39,7 +39,7 @@ public class AudioController : ControllerBase
             _logger.LogError(exception, errorMessage);
             response.ErrorMessage = errorMessage;
 
-            return BadRequest(response); 
+            return BadRequest(); 
         }
     }
 }
