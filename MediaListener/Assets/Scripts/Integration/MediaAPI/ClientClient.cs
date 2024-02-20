@@ -67,5 +67,49 @@ namespace MediaListener.Integration.MediaAPI
 
             return response;
         }
+
+        public async UniTask<(bool Success, AudioClip audioClip)> StreamAudio(CancellationToken cancellationToken)
+        {
+            (bool Success, AudioClip audioClip) response = (false, null);
+
+            try
+            {
+                var unityWebRequest = UnityWebRequestMultimedia
+                    .GetAudioClip($"{_settings.Url}{_settings.Audio}", AudioType.WAV);
+                
+                var downloadHandler = unityWebRequest.downloadHandler as DownloadHandlerAudioClip;
+                    downloadHandler.streamAudio = true;
+
+                await unityWebRequest
+                    .SendWebRequest()
+                    .WithCancellation(cancellationToken);
+
+                var hasError = 
+                    unityWebRequest.result == UnityWebRequest.Result.ConnectionError ||
+                    unityWebRequest.result == UnityWebRequest.Result.DataProcessingError ||
+                    unityWebRequest.result == UnityWebRequest.Result.ProtocolError;
+
+                if(!hasError)
+                {
+                    while(!downloadHandler.isDone)
+                    {
+                        await UniTask.Yield();
+                    }
+
+                    response.audioClip = downloadHandler.audioClip;
+                    response.Success = true;
+                }
+                else
+                {
+                    Debug.LogError($"An error ocurred while streaming the audio file from MediaAPI [requestResult={unityWebRequest.result}].");
+                }
+            }
+            catch(Exception exception)
+            {
+                Debug.LogException(exception);
+            }
+
+            return response;
+        }
     }
 }

@@ -24,6 +24,8 @@ namespace MediaListener.Core
 		{
 			try
 			{
+				Debug.Log("Download - Collision Start");
+
 				if(_audioSource.clip == null)
 				{
 					var audioClip = await _clientClient.DownloadAudio(this.GetCancellationTokenOnDestroy());
@@ -35,9 +37,6 @@ namespace MediaListener.Core
 				}
 
 				_audioSource.Play();
-
-				Debug.Log("Download - Collision Start");
-
 			}
 			catch(Exception exception)
 			{
@@ -45,13 +44,10 @@ namespace MediaListener.Core
 			}
 		}
 	
-		void OnTriggerStay(Collider other)
-		{
-			Debug.Log("Download - Collision Stay");
-		}
-	
 		void OnTriggerExit(Collider other)
 		{
+			Debug.Log("Download - Collision Exit");
+
 			_audioSource.Stop();
 		}
 	}
