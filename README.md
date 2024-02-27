@@ -12,7 +12,9 @@ Hi, this is a project where a Unity Game reproduces an audio file that I downloa
     - MediaReproducer:
         - It's a simple game made in Unity where you control a ball, and you have 2 platforms;
         - If you step on the grey one, it will download an audio file from MediaAPI and reproduce it on the game;
-        - Setting on the white one will also reproduce the same audio file from MediaAPI, but the file will be streamed instead of downloaded.
+        - Setting on the white one will also reproduce the same audio file from MediaAPI, but the file will be streamed instead of downloaded;
+        - I used UniTask on this project, as it makes code more similar to what I'm used to, as a Software Developer on my job.
+             
 
 I have here a diagram that shows better how this project works:
 
