@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Cysharp.Threading.Tasks;
 using MediaListener.Integration.MediaAPI;
 using MediaListener.Integration.MediaAPI.Interfaces;
@@ -6,8 +7,7 @@ using UnityEngine;
 
 namespace MediaListener.Core
 {
-	
-	public class StreamPlay : MonoBehaviour
+	public class DownloadPlay : MonoBehaviour
 	{
 
 		private IClientClient _clientClient;
@@ -19,17 +19,16 @@ namespace MediaListener.Core
 		{
 			_clientClient = new ClientClient();
 		}
-		
+
 		async void OnTriggerEnter(Collider other)
 		{
-			Debug.Log("Stream - Collision Enter");
-
 			try
 			{
+				Debug.Log("Download - Collision Enter");
 
 				if(_audioSource.clip == null)
 				{
-					var audioClip = await _clientClient.StreamAudio(this.GetCancellationTokenOnDestroy());
+					var audioClip = await _clientClient.DownloadAudio(this.GetCancellationTokenOnDestroy());
 					
 					if(audioClip.Success)
 					{
@@ -47,7 +46,9 @@ namespace MediaListener.Core
 	
 		void OnTriggerExit(Collider other)
 		{
-			Debug.Log("Stream - Collision Exit");
+			Debug.Log("Download - Collision Exit");
+
+			_audioSource.Stop();
 		}
 	}
 }
